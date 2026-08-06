@@ -1,0 +1,11 @@
+uvicorn app.main:app --port 8000 --reload
+
+http://127.0.0.1:8000/
+
+127.0.0.1 = > localhost
+app.get = http://127.0.0:8000 aita match 
+then it will check it is match the which path
+it check from top to bottom
+
+query paramter, path parameter, order static first then dynamic
+we will learn these things when needed not before
