@@ -3,6 +3,7 @@
 from fastapi import HTTPException
 
 from app.core.security import create_access_token, hash_password, verify_password
+from app.exception.custom_exceptions import UnauthorizedException
 from app.models.user import User
 from app.repository import user_repository
 
@@ -19,10 +20,7 @@ def user_login_service(user, db):
     db_user= user_repository.user_login(user = user, db = db)
     
     if not verify_password(user.password, db_user.password):
-            raise HTTPException(
-                status_code=404,
-                detail = "invalid authentication"
-            )
+            raise UnauthorizedException()
     token = create_access_token({
             "user_id":db_user.id
     })
