@@ -1,6 +1,6 @@
 
-from app.database import Base
-from sqlalchemy import Column, Integer, String,Date
+from app.core.database import Base
+from sqlalchemy import Column, ForeignKey, Integer, String,Date
 
 class Task(Base):
     __tablename__ = 'tasks'
@@ -8,4 +8,5 @@ class Task(Base):
     title = Column(String, nullable=False)
     description = Column(String, nullable=False)
     status = Column(String, default='pending')
+    user_id = Column(Integer, ForeignKey("users.id"))
     
