@@ -1,45 +1,43 @@
+ 
+
 from fastapi import HTTPException
 
 from app.models.task import Task
+from app.repository import task_repository
+def get_task_service(db, task_id, user_id):
+     task = task_repository.get_task_by_user_id(db = db, task_id = task_id, user_id = user_id)
+     if not task:
+          raise HTTPException(
+               status_code=404,
+               detail="Task Not Found"
+          ) 
+     return task
 
-def get_tasks_service(db, user_id):
-    tasks = db.query(Task).filter(user_id== Task.user_id).all()
-    return tasks
+def get_tasks_service(db, user_id): 
+    return task_repository.get_task_by_user(db = db, user_id = user_id)
 
 
-def create_task_service(db, task, user_id):
-    new_task = Task(
-            title= task.title,
-            description = task.description ,
-            user_id = user_id
-        )
-    db.add(new_task)
-    db.commit()
-    db.refresh(new_task)
-    return new_task
+def create_task_service(db, task, user_id):  
+    return task_repository.create_task(db = db, task = task, user_id = user_id)
 
 
 
 def update_task_service(db, task, task_id, user_id):
-    task_db = db.query(Task).filter((task_id == Task.id) & (user_id == Task.user_id )).first()
+    
+    task_db =  task_repository.get_task_by_user_id(db = db, task_id = task_id, user_id = user_id)
     if not task_db:
         raise HTTPException(
             status_code=404,
             detail = 'Task Not Found'
-        )
-    task_db.title = task.title
-    task_db.description = task.description
-    task_db.status = task.status
-    db.commit()
-    db.refresh(task_db)
-    return task_db
+        )     
+    return task_repository.update_task(task_db = task_db,db = db, task = task , task_id = task_id, user_id = user_id)
 
 def delete_task_service(db, task_id, user_id):
-    task = db.query(Task).filter((task_id == Task.id) & (user_id == Task.user_id)).first()
+    task = task_repository.get_task_by_user_id(db = db, task_id = task_id, user_id = user_id)
     if not task:
             raise HTTPException(
                 status_code=404,
                 detail = 'Task Not Found'
             )
-    db.delete(task)
-    db.commit()
+     
+    task_repository.delete_task(db = db, task = task)

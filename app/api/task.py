@@ -5,8 +5,16 @@ from app.models.user import User
 from app.schemas.task import TaskCreate, TaskUpdate
 from sqlalchemy.orm import Session
 
-from app.services.task_serivce import create_task_service, delete_task_service, get_tasks_service, update_task_service
+from app.services.task_serivce import create_task_service, delete_task_service, get_task_service, get_tasks_service, update_task_service
 router = APIRouter()
+
+@router.get('/task/{task_id}')
+def get_task(task_id:int,
+             db:Session = Depends(get_db),
+             current_user:User =Depends(get_current_user)
+             ):
+    return get_task_service(db= db, task_id = task_id, user_id = current_user.id)
+
 
 @router.get('/task')
 def get_tasks( 
