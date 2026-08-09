@@ -4,3 +4,5 @@
 4. in filter without bracket use & operations
 5. ForeignKey = ("users.id") here given = 
 6. after filter not write first or all
+7. keep in mind that after creating any model must add to in the .env of alembic file
+8.  
