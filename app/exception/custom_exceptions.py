@@ -18,7 +18,7 @@ class NotFoundException(AppException):
         )
 
 class InvalidCredentialsException(AppException):
-    def __init__(self, message:str ='Resource Not Found'):
+    def __init__(self, message:str ='Invalid'):
         super().__init__(
             message=message,
             status_code=400,

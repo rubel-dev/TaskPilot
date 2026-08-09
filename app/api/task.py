@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from app.api.deps import get_db, get_current_user
+from app.api.deps import get_db, get_current_user, require_roles
 from app.models.task import Task
 from app.models.user import User
 from app.schemas.task import TaskCreate, TaskUpdate
@@ -39,7 +39,7 @@ def update_task(
     task:TaskUpdate,
     task_id:int,
     db:Session = Depends(get_db),
-    current_user:User = Depends(get_current_user)
+    current_user:User = Depends(require_roles(['manager','admin']))
 ): 
     return update_task_service(db = db, task = task, task_id = task_id, user_id = current_user.id)
 
@@ -49,7 +49,7 @@ def update_task(
 def delete_task(
     task_id:int,
     db:Session = Depends(get_db),
-    current_user:User = Depends(get_current_user)
+    current_user:User = Depends(require_roles(['admin']))
 ):
    
     delete_task_service(db = db, task_id = task_id, user_id = current_user.id)
